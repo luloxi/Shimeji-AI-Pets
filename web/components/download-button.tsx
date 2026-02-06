@@ -1,0 +1,215 @@
+"use client";
+
+import React from "react";
+import styled from "styled-components";
+import Link from "next/link";
+import { useLanguage } from "./language-provider";
+
+const DownloadButton = () => {
+  const { isSpanish } = useLanguage();
+  return (
+    <StyledWrapper>
+      <Link href="/download">
+        <button type="button" className="btn">
+          <strong>
+            {isSpanish ? "PROBAR EXTENSIÓN" : "TRY OUR CHROME EXTENSION"}
+          </strong>
+          <div id="container-stars">
+            <div id="stars" />
+          </div>
+          <div id="glow">
+            <div className="circle" />
+            <div className="circle" />
+          </div>
+        </button>
+      </Link>
+    </StyledWrapper>
+  );
+};
+
+const StyledWrapper = styled.div`
+  .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 13rem;
+    overflow: hidden;
+    height: 3rem;
+    background-size: 300% 300%;
+    cursor: pointer;
+    backdrop-filter: blur(1rem);
+    border-radius: 5rem;
+    transition: 0.5s;
+    animation: gradient_301 5s ease infinite;
+    border: double 4px transparent;
+    background-image: linear-gradient(#000000, #000000),
+      linear-gradient(
+        137.48deg,
+        #ffcc66 10%,
+        #ff6666 45%,
+        #ff99cc 67%,
+        #1159cc 87%
+      );
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+  }
+
+  @media (max-width: 640px) {
+    .btn {
+      width: 100%;
+      margin: 0 auto;
+    }
+  }
+
+  #container-stars {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: 0.5s;
+    backdrop-filter: blur(1rem);
+    border-radius: 5rem;
+  }
+
+  strong {
+    z-index: 2;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-shadow: 0 0 4px white;
+  }
+
+  #glow {
+    position: absolute;
+    display: flex;
+    width: 12rem;
+  }
+
+  .circle {
+    width: 100%;
+    height: 30px;
+    filter: blur(2rem);
+    animation: pulse_3011 4s infinite;
+    z-index: -1;
+  }
+
+  .circle:nth-of-type(1) {
+    background: rgba(255, 102, 102, 0.65);
+  }
+
+  .circle:nth-of-type(2) {
+    background: rgba(17, 89, 204, 0.7);
+  }
+
+  .btn:hover #container-stars {
+    z-index: 1;
+    background-color: #000000;
+  }
+
+  .btn:hover {
+    transform: scale(1.1);
+  }
+
+  .btn:active {
+    border: double 4px #ff6666;
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    animation: none;
+  }
+
+  .btn:active .circle {
+    background: #ff6666;
+  }
+
+  #stars {
+    position: relative;
+    background: transparent;
+    width: 200rem;
+    height: 200rem;
+  }
+
+  #stars::after {
+    content: "";
+    position: absolute;
+    top: -10rem;
+    left: -100rem;
+    width: 100%;
+    height: 100%;
+    animation: animStarRotate 90s linear infinite;
+  }
+
+  #stars::after {
+    background-image: radial-gradient(#ffffff 1px, transparent 1%);
+    background-size: 50px 50px;
+  }
+
+  #stars::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 170%;
+    height: 500%;
+    animation: animStar 60s linear infinite;
+  }
+
+  #stars::before {
+    background-image: radial-gradient(#ffffff 1px, transparent 1%);
+    background-size: 50px 50px;
+    opacity: 0.5;
+  }
+
+  @keyframes animStar {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(-135rem);
+    }
+  }
+
+  @keyframes animStarRotate {
+    from {
+      transform: rotate(360deg);
+    }
+
+    to {
+      transform: rotate(0);
+    }
+  }
+
+  @keyframes gradient_301 {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes pulse_3011 {
+    0% {
+      transform: scale(0.75);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+    }
+
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+      transform: scale(0.75);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+  }
+`;
+
+export default DownloadButton;

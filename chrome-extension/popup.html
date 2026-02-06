@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shimeji</title>
+  <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+  <header class="popup-header">
+    <span class="logo">Shimeji</span>
+  </header>
+
+  <section class="character-section">
+    <div class="popup-links">
+      <a href="https://shimeji-nft-config-page.vercel.app/" target="_blank" class="popup-link wallet-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+          <line x1="9" y1="9" x2="9.01" y2="9"></line>
+          <line x1="15" y1="9" x2="15.01" y2="9"></line>
+        </svg>
+        <span>Connect Freighter</span>
+      </a>
+      <a href="https://www.shimeji.dev/factory" target="_blank" class="popup-link marketplace-link">
+        <span>Open more portals</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="controls-section">
+    <div class="control-group">
+      <h3>Size</h3>
+      <div class="button-group">
+        <button class="control-btn size-btn" data-size="small">S</button>
+        <button class="control-btn size-btn" data-size="medium">M</button>
+        <button class="control-btn size-btn" data-size="big">L</button>
+      </div>
+    </div>
+    <div class="control-group">
+      <h3>Visibility</h3>
+      <div class="visibility-controls">
+        <label class="toggle-row" id="page-toggle-row">
+          <span class="toggle-label">Enabled on this page</span>
+          <input type="checkbox" id="page-toggle" class="toggle-checkbox">
+          <span class="toggle-slider"></span>
+        </label>
+        <div class="global-controls">
+          <button class="control-btn global-btn" id="enable-all-btn">Enable All</button>
+          <button class="control-btn global-btn" id="disable-all-btn">Disable All</button>
+        </div>
+        <div class="global-status" id="global-status"></div>
+      </div>
+    </div>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>

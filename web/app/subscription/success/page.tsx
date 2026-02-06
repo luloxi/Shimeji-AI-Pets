@@ -1,0 +1,49 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Home } from "lucide-react";
+
+export default async function SubscriptionSuccessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string; already?: string }>;
+}) {
+  const params = await searchParams;
+  const already = params.already === "true";
+
+  const typeMessages: Record<string, string> = {
+    updates: "project updates and new features",
+    shimeji_request: "shimeji availability notifications",
+    collection_request: "new collection announcements",
+  };
+
+  const message = params.type
+    ? typeMessages[params.type] || "updates"
+    : "updates";
+
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-[#FFCC66] via-[#FF9999] to-[#1159CC] flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 text-center">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-6">
+          <CheckCircle className="w-8 h-8 text-green-600" />
+        </div>
+
+        <h1 className="text-2xl font-bold text-foreground mb-2">
+          {already ? "Already Confirmed!" : "You're Subscribed!"}
+        </h1>
+
+        <p className="text-muted-foreground mb-6">
+          {already
+            ? `Your email was already confirmed. You'll receive ${message} from Shimeji Factory.`
+            : `Thanks for confirming! You'll now receive ${message} from Shimeji Factory.`}
+        </p>
+
+        <Link href="/">
+          <Button className="bg-[#1159CC] hover:bg-[#000000] text-white rounded-xl px-6">
+            <Home className="w-4 h-4 mr-2" />
+            Back to Home
+          </Button>
+        </Link>
+      </div>
+    </main>
+  );
+}

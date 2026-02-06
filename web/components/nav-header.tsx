@@ -1,0 +1,119 @@
+"use client";
+
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { SparkleAnimation } from "./sparkle-animation";
+import DownloadButton from "./download-button";
+import { LanguageSwitcher } from "./language-switcher";
+import { useLanguage } from "./language-provider";
+import { FreighterConnectButton } from "./freighter-connect-button";
+
+interface NavHeaderProps {
+  showConnectButton?: boolean;
+}
+
+export function NavHeader({ showConnectButton = false }: NavHeaderProps) {
+  const { isSpanish } = useLanguage();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLogoHovered, setIsLogoHovered] = useState(false);
+
+  return (
+    <header className="fixed top-4 left-4 right-4 z-50">
+      <div className="max-w-6xl mx-auto bg-[#FFCCCC] backdrop-blur-lg rounded-2xl shadow-sm">
+        <div className="flex items-center justify-between h-16 px-6 w-full">
+          <div
+            className="relative"
+            onMouseEnter={() => setIsLogoHovered(true)}
+            onMouseLeave={() => setIsLogoHovered(false)}
+          >
+            <Link href="/" className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+                <Image
+                  src="/logo.png"
+                  alt="Shimeji Logo"
+                  width={36}
+                  height={36}
+                />
+              </div>
+              <span className="text-lg font-bold text-foreground tracking-tight">
+                Shimeji Factory
+              </span>
+            </Link>
+            <SparkleAnimation isHovering={isLogoHovered} />
+          </div>
+
+          <nav className="hidden lg:flex items-center gap-8">
+            <Link
+              href="/"
+              className="text-md text-muted-foreground hover:text-foreground transition-colors font-medium"
+            >
+              {isSpanish ? "Inicio" : "Home"}
+            </Link>
+            <Link
+              href="/factory"
+              className="text-md text-muted-foreground hover:text-foreground transition-colors font-medium"
+            >
+              {isSpanish ? "Fábrica" : "Factory"}
+            </Link>
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-3">
+              <LanguageSwitcher />
+              <DownloadButton />
+              {showConnectButton && <FreighterConnectButton />}
+            </div>
+            <button
+              className="inline-flex items-center justify-center lg:hidden p-2"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {isMenuOpen && (
+          <div className="lg:hidden px-6 pb-6 border-t border-border">
+            <nav className="flex flex-col gap-4 pt-4">
+              <Link
+                href="/"
+                className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {isSpanish ? "Inicio" : "Home"}
+              </Link>
+              <Link
+                href="/factory"
+                className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {isSpanish ? "Fábrica" : "Factory"}
+              </Link>
+              <Link
+                href="/download"
+                className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {isSpanish ? "Descargar" : "Download"}
+              </Link>
+              <div className="pt-2">
+                <LanguageSwitcher />
+              </div>
+              <div className="flex flex-col gap-2 pt-4">
+                <DownloadButton />
+                {showConnectButton && <FreighterConnectButton />}
+              </div>
+            </nav>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}

@@ -577,11 +577,14 @@
             mascot.stateTimer = 0;
         }
 
-        // Scroll to bottom and focus input
-        setTimeout(() => {
-            if (chatMessagesEl) chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
-            if (chatInputEl) chatInputEl.focus();
-        }, 50);
+        // Load persisted conversation, render, scroll to bottom and focus
+        loadConversation(() => {
+            renderConversationHistory();
+            setTimeout(() => {
+                if (chatMessagesEl) chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+                if (chatInputEl) chatInputEl.focus();
+            }, 50);
+        });
     }
 
     function closeChatBubble() {
@@ -692,6 +695,30 @@
         }
     }
 
+    function saveConversation() {
+        chrome.storage.local.set({ conversationHistory });
+    }
+
+    function loadConversation(callback) {
+        chrome.storage.local.get(['conversationHistory'], (data) => {
+            conversationHistory = Array.isArray(data.conversationHistory) ? data.conversationHistory : [];
+            if (callback) callback();
+        });
+    }
+
+    function renderConversationHistory() {
+        if (!chatMessagesEl) return;
+        // Clear existing messages
+        chatMessagesEl.innerHTML = '';
+        conversationHistory.forEach((msg) => {
+            const msgEl = document.createElement('div');
+            msgEl.className = `shimeji-chat-msg ${msg.role === 'user' ? 'user' : 'ai'}`;
+            msgEl.textContent = msg.content;
+            chatMessagesEl.appendChild(msgEl);
+        });
+        chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    }
+
     function appendMessage(role, content) {
         if (!chatMessagesEl) return;
         const msgEl = document.createElement('div');
@@ -726,6 +753,7 @@
         chatInputEl.value = '';
         appendMessage('user', text);
         conversationHistory.push({ role: 'user', content: text });
+        saveConversation();
 
         showThinking();
 
@@ -743,6 +771,7 @@
                 }
                 if (response && response.content) {
                     conversationHistory.push({ role: 'assistant', content: response.content });
+                    saveConversation();
                     appendMessage('ai', response.content);
                     // Show alert if chat was closed while waiting
                     if (!isChatOpen) {
@@ -794,6 +823,7 @@
                 }
                 if (response.content) {
                     conversationHistory.push({ role: 'assistant', content: response.content });
+                    saveConversation();
                     appendMessage('ai', response.content);
                     // Don't force open chat — just show alert
                     showAlert();
@@ -1151,6 +1181,15 @@
                     scheduleProactiveMessage();
                 } else {
                     clearProactiveTimer();
+                }
+            }
+            if (changes.conversationHistory) {
+                const newHistory = changes.conversationHistory.newValue;
+                if (Array.isArray(newHistory) && newHistory.length !== conversationHistory.length) {
+                    conversationHistory = newHistory;
+                    if (isChatOpen) {
+                        renderConversationHistory();
+                    }
                 }
             }
         }
